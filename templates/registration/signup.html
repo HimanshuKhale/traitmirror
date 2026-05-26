@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Sign up - TraitMirror{% endblock %}
+{% block content %}
+<section class="auth-panel">
+  <h1>Create your account</h1>
+  <p class="muted">TraitMirror is a non-clinical reflection tool for comparing your ideal priorities with current patterns.</p>
+  <form method="post" class="form-stack">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="primary" type="submit">Start building</button>
+  </form>
+</section>
+{% endblock %}

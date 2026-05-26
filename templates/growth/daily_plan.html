@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Daily growth - TraitMirror{% endblock %}
+{% block content %}
+<section class="page-head">
+  <h1>Daily growth plan</h1>
+  <p class="muted">Small practices based on the widest gaps between your chosen ideal and current patterns.</p>
+</section>
+
+<section class="panel">
+  {% if growth_plan %}
+    <h2>{{ growth_plan.summary }}</h2>
+    {% for item in growth_plan.recommendations %}
+      <form method="post" action="{% url 'practice_event' %}" class="recommendation">
+        {% csrf_token %}
+        <input type="hidden" name="trait" value="{{ item.trait }}">
+        <strong>{{ item.trait_name }}</strong>
+        <p>{{ item.message }}</p>
+        <textarea name="note" rows="2" placeholder="Optional note"></textarea>
+        <button type="submit">Mark practiced</button>
+      </form>
+    {% endfor %}
+  {% else %}
+    <p>Complete an assessment to receive a daily growth plan.</p>
+  {% endif %}
+</section>
+{% endblock %}

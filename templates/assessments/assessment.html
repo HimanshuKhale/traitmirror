@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Assessment - TraitMirror{% endblock %}
+{% block content %}
+<section class="page-head">
+  <h1>Scenario assessment</h1>
+  <p class="muted">Answer from your recent everyday patterns. This is reflection, not diagnosis.</p>
+</section>
+
+{% if question %}
+  <form method="post" class="panel form-stack">
+    {% csrf_token %}
+    <input type="hidden" name="question_id" value="{{ question.id }}">
+    <div class="progress">{{ answered_count }} of {{ total_questions }} answered</div>
+    <h2>{{ question.prompt }}</h2>
+    <div class="choice-grid">
+      {% for value, label in choices %}
+        <label>
+          <input type="radio" name="response" value="{{ value }}" required>
+          <span>{{ label }}</span>
+        </label>
+      {% endfor %}
+    </div>
+    <button class="primary" type="submit">Continue</button>
+  </form>
+{% else %}
+  <section class="notice">This assessment round is ready to complete.</section>
+{% endif %}
+{% endblock %}
