@@ -1,302 +1,117 @@
 {% extends "base.html" %}
 {% block title %}Dashboard - TraitMirror{% endblock %}
-{% block extra_head %}
-<style>
-  .dashboard-head {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 48px;
-    align-items: start;
-    min-height: 48vh;
-    padding: 6vh 0 10vh;
-  }
-
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 24px;
-    padding: 8px 12px;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 999px;
-    color: rgba(245,247,251,0.68);
-    background: rgba(255,255,255,0.055);
-    backdrop-filter: blur(18px);
-    font-size: 0.82rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .eyebrow::before {
-    content: "";
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--good);
-    box-shadow: 0 0 18px rgba(156,255,203,0.8);
-  }
-
-  .dashboard-head h1 {
-    max-width: 880px;
-    margin: 0;
-    font-size: clamp(3.8rem, 11vw, 9.5rem);
-    line-height: 0.84;
-    letter-spacing: -0.09em;
-    font-weight: 800;
-  }
-
-  .dashboard-head h1 span {
-    display: block;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(255,255,255,0.44);
-    text-shadow: none;
-  }
-
-  .dashboard-head p {
-    max-width: 560px;
-    margin: 34px 0 0;
-    font-size: clamp(1rem, 1.5vw, 1.22rem);
-    line-height: 1.75;
-  }
-
-  .actions {
-    position: sticky;
-    top: 130px;
-    display: grid;
-    gap: 12px;
-    min-width: 210px;
-    transform: rotateY(-14deg) translateZ(60px);
-    transform-style: preserve-3d;
-  }
-
-  .actions .button:nth-child(2) {
-    transform: translateX(28px) translateZ(-20px);
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
-    gap: 34px;
-    align-items: start;
-  }
-
-  .panel {
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.13);
-    border-radius: 38px;
-    background:
-      linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.045)),
-      rgba(5, 8, 15, 0.42);
-    backdrop-filter: blur(26px) saturate(135%);
-    box-shadow: var(--shadow);
-    transform-style: preserve-3d;
-  }
-
-  .panel::before {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    background: radial-gradient(circle at 20% 0%, rgba(158,231,255,0.18), transparent 32%),
-                radial-gradient(circle at 100% 20%, rgba(199,166,255,0.15), transparent 28%);
-    opacity: 0.8;
-    pointer-events: none;
-  }
-
-  .panel > * { position: relative; }
-
-  .panel.wide {
-    min-height: 540px;
-    padding: 34px;
-    transform: rotateX(4deg) rotateY(calc(var(--mx, 0) * -4deg)) translateZ(0);
-  }
-
-  .panel.side {
-    min-height: 520px;
-    padding: 30px;
-    margin-top: 12vh;
-    transform: rotateX(7deg) rotateY(calc(var(--mx, 0) * 5deg)) translateZ(44px);
-  }
-
-  .panel h2 {
-    margin: 0 0 26px;
-    font-size: clamp(1.25rem, 2vw, 1.8rem);
-    letter-spacing: -0.04em;
-  }
-
-  .table {
-    display: grid;
-    gap: 12px;
-  }
-
-  .row {
-    display: grid;
-    grid-template-columns: minmax(220px, 1.25fr) 0.5fr 0.55fr 0.45fr;
-    gap: 16px;
-    align-items: center;
-    min-height: 84px;
-    padding: 16px 18px;
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 24px;
-    background: rgba(255,255,255,0.045);
-    box-shadow: 0 14px 44px rgba(0,0,0,0.18);
-  }
-
-  .row.header {
-    min-height: auto;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    color: rgba(245,247,251,0.48);
-    background: transparent;
-    border-color: transparent;
-    box-shadow: none;
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .row strong {
-    display: block;
-    margin-bottom: 7px;
-    font-size: 1.02rem;
-  }
-
-  .row small {
-    display: block;
-    max-width: 440px;
-    color: rgba(245,247,251,0.50);
-    line-height: 1.45;
-  }
-
-  .row span:not(:first-child) {
-    color: rgba(245,247,251,0.78);
-    font-weight: 600;
-  }
-
-  .attention {
-    color: var(--warning) !important;
-    text-shadow: 0 0 22px rgba(255,211,138,0.35);
-  }
-
-  .recommendation {
-    margin-top: 18px;
-    padding: 18px;
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 24px;
-    background: rgba(255,255,255,0.055);
-  }
-
-  .recommendation strong {
-    display: inline-block;
-    margin-bottom: 8px;
-    color: var(--accent);
-  }
-
-  .recommendation p {
-    margin: 0;
-    color: rgba(245,247,251,0.64);
-    line-height: 1.65;
-  }
-
-  .empty-space-note {
-    margin: 16vh auto 4vh;
-    max-width: 620px;
-    text-align: center;
-    color: rgba(245,247,251,0.38);
-    line-height: 1.7;
-  }
-
-  @media (max-width: 960px) {
-    .dashboard-head,
-    .grid {
-      grid-template-columns: 1fr;
-    }
-
-    .dashboard-head { min-height: auto; }
-    .actions { position: static; transform: none; }
-    .actions .button:nth-child(2) { transform: none; }
-    .panel.side { margin-top: 0; transform: none; }
-    .panel.wide { transform: none; }
-    .row { grid-template-columns: 1fr 1fr; }
-    .row.header { display: none; }
-  }
-
-  @media (max-width: 540px) {
-    .dashboard-head h1 { font-size: clamp(3.2rem, 18vw, 5.2rem); }
-    .row { grid-template-columns: 1fr; }
-    .panel.wide, .panel.side { padding: 20px; border-radius: 28px; }
-  }
-</style>
-{% endblock %}
 
 {% block content %}
-<section class="space-stage">
-  <section class="dashboard-head">
-    <div>
-      <div class="eyebrow">Reflection cockpit</div>
-      <h1>Your trait <span>gap dashboard</span></h1>
-      <p class="muted">A calm, spacious mirror for your ideal self, current patterns, and the next small action that closes the distance.</p>
-    </div>
-    <div class="actions">
-      <a class="button primary" href="{% url 'ideal_profile' %}">Edit ideal self</a>
-      <a class="button" href="{% url 'assessment' %}">Take assessment</a>
-    </div>
-  </section>
+<section class="dashboard-head">
+  <div class="hero-copy">
+    <div class="eyebrow">Reflection insight</div>
+    <h1>Your trait gap dashboard</h1>
+    <p>A clear view of your ideal priorities, current patterns, and the next small practices that help close the distance.</p>
+  </div>
+  <div class="actions">
+    <a class="button primary" href="{% url 'ideal_profile' %}">Edit ideal self</a>
+    <a class="button" href="{% url 'assessment' %}">Take assessment</a>
+  </div>
+</section>
 
-  {% if not has_ideal_profile %}
-    <section class="notice">Build your 100-point ideal self map to make the gap view useful.</section>
-  {% endif %}
-  {% if not has_scores %}
-    <section class="notice">Complete the scenario assessment to see current trait-expression scores.</section>
-  {% endif %}
+{% if not has_ideal_profile %}
+  <section class="notice">Build your 100-point ideal self map to make the gap view useful.</section>
+{% endif %}
+{% if not has_scores %}
+  <section class="notice">Complete the scenario assessment to see current pattern scores.</section>
+{% endif %}
 
-  <section class="grid">
-    <article class="panel wide">
-      <h2>Gap view</h2>
-      <div class="table">
-        <div class="row header">
-          <span>Trait</span><span>Ideal</span><span>Current share</span><span>Gap</span>
-        </div>
-        {% for row in gap_rows %}
-          <div class="row">
-            <span>
+<section class="metric-grid" aria-label="Dashboard summary">
+  <article class="metric-card">
+    <span class="metric-label">Ideal map</span>
+    <span class="metric-value">{% if has_ideal_profile %}100{% else %}0{% endif %}</span>
+    <small>points allocated</small>
+  </article>
+  <article class="metric-card">
+    <span class="metric-label">Current pattern</span>
+    <span class="metric-value">{% if latest_session %}Ready{% else %}New{% endif %}</span>
+    <small>{% if latest_session %}assessment complete{% else %}assessment pending{% endif %}</small>
+  </article>
+  <article class="metric-card">
+    <span class="metric-label">Suggested practice</span>
+    <span class="metric-value">{% if growth_plan %}{{ growth_plan.recommendations|length }}{% else %}0{% endif %}</span>
+    <small>focus prompts</small>
+  </article>
+</section>
+
+<section class="dashboard-grid">
+  <article class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>Trait dashboard</h2>
+        <p class="muted">Compare ideal score, current score, gap, and a suggested practice.</p>
+      </div>
+    </div>
+
+    <div class="trait-card-list">
+      {% for row in gap_rows %}
+        <article class="trait-card">
+          <div class="trait-card-head">
+            <div class="trait-card-title">
               <strong>{{ row.trait.name }}</strong>
               <small>{{ row.trait.description }}</small>
+            </div>
+            <span class="gap-pill {% if row.needs_attention %}growth-area{% endif %}">
+              {% if row.needs_attention %}Growth area{% else %}In range{% endif %}
             </span>
-            <span>{{ row.ideal_points }} pts</span>
-            <span>{% if row.current_score is not None %}{{ row.current_share }}%{% else %}Pending{% endif %}</span>
-            <span class="{% if row.needs_attention %}attention{% endif %}">{{ row.gap }}</span>
           </div>
-        {% empty %}
-          <div class="row">
-            <span>
-              <strong>No trait rows yet</strong>
-              <small>Create your ideal profile first. This space will become your map.</small>
-            </span>
-            <span>Pending</span>
-            <span>Pending</span>
-            <span>—</span>
-          </div>
-        {% endfor %}
-      </div>
-    </article>
 
-    <article class="panel side">
-      <h2>Daily growth plan</h2>
-      {% if growth_plan %}
-        <p class="muted">{{ growth_plan.summary }}</p>
+          <div class="trait-stats">
+            <div class="trait-stat">
+              <span>Ideal score</span>
+              <strong>{{ row.ideal_points }} pts</strong>
+              <div class="progress-track" aria-hidden="true">
+                <span class="progress-fill" style="--progress: {{ row.ideal_points }}%;"></span>
+              </div>
+            </div>
+            <div class="trait-stat">
+              <span>Current score</span>
+              <strong>{% if row.current_score is not None %}{{ row.current_score }}{% else %}Pending{% endif %}</strong>
+              <div class="progress-track" aria-hidden="true">
+                <span class="progress-fill soft" style="--progress: {% if row.current_score is not None %}{{ row.current_score }}{% else %}0{% endif %}%;"></span>
+              </div>
+            </div>
+            <div class="trait-stat">
+              <span>Gap</span>
+              <strong>{{ row.gap }}</strong>
+              <small>{% if row.needs_attention %}More room to practice{% else %}Close to your current map{% endif %}</small>
+            </div>
+          </div>
+
+          <p class="practice-note"><strong>Suggested practice:</strong> {{ row.trait.growth_prompt }}</p>
+        </article>
+      {% empty %}
+        <div class="empty-state">Create your ideal profile first. This area will become your reflection map.</div>
+      {% endfor %}
+    </div>
+  </article>
+
+  <aside class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>Daily growth plan</h2>
+        <p class="muted">Small, specific prompts for today.</p>
+      </div>
+    </div>
+
+    {% if growth_plan %}
+      <p>{{ growth_plan.summary }}</p>
+      <div class="recommendation-list">
         {% for item in growth_plan.recommendations %}
           <div class="recommendation">
             <strong>{{ item.trait_name }}</strong>
             <p>{{ item.message }}</p>
           </div>
         {% endfor %}
-      {% else %}
-        <p class="muted">Your plan appears after the first completed assessment. Until then, this space stays intentionally quiet.</p>
-      {% endif %}
-    </article>
-  </section>
-
-  <p class="empty-space-note">TraitMirror is designed like an empty room: fewer distractions, more depth, and enough silence for the user to actually notice themselves.</p>
+      </div>
+    {% else %}
+      <div class="empty-state">Your plan appears after the first completed assessment.</div>
+    {% endif %}
+  </aside>
 </section>
 {% endblock %}

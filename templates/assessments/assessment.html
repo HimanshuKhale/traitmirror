@@ -2,15 +2,23 @@
 {% block title %}Assessment - TraitMirror{% endblock %}
 {% block content %}
 <section class="page-head">
-  <h1>Scenario assessment</h1>
-  <p class="muted">Answer from your recent everyday patterns. This is reflection, not diagnosis.</p>
+  <div class="hero-copy">
+    <div class="eyebrow">Current pattern</div>
+    <h1>Scenario assessment</h1>
+    <p>Answer from recent everyday behavior. This tool is for reflection, clarity, and suggested practice.</p>
+  </div>
 </section>
 
 {% if question %}
-  <form method="post" class="panel form-stack">
+  <form method="post" class="panel form-stack assessment-card">
     {% csrf_token %}
     <input type="hidden" name="question_id" value="{{ question.id }}">
-    <div class="progress">{{ answered_count }} of {{ total_questions }} answered</div>
+    <div class="assessment-progress">
+      <span class="progress-label">{{ answered_count }} of {{ total_questions }} answered</span>
+      <div class="progress-track" aria-hidden="true">
+        <span class="progress-fill" style="--progress: {% widthratio answered_count total_questions 100 %}%;"></span>
+      </div>
+    </div>
     <h2>{{ question.prompt }}</h2>
     <div class="choice-grid">
       {% for value, label in choices %}

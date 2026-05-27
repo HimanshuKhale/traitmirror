@@ -3,8 +3,11 @@
 {% block title %}Ideal self - TraitMirror{% endblock %}
 {% block content %}
 <section class="page-head">
-  <h1>Ideal self builder</h1>
-  <p class="muted">Distribute exactly 100 points across the traits you want to emphasize.</p>
+  <div class="hero-copy">
+    <div class="eyebrow">Ideal self</div>
+    <h1>Build your 100-point trait map</h1>
+    <p>Give more points to the traits you want to emphasize. The total must equal exactly 100.</p>
+  </div>
 </section>
 
 <form method="post" class="panel form-stack" data-points-form>
@@ -19,9 +22,15 @@
       {{ form|get_item:trait.code }}
     </label>
   {% endfor %}
-  <div class="total-line">Total: <strong data-points-total>0</strong> / 100</div>
+  <div class="total-line">
+    <span>Total allocation</span>
+    <strong><span data-points-total>0</span> / 100</strong>
+  </div>
   <button class="primary" type="submit">Save ideal self</button>
 </form>
+{% endblock %}
+
+{% block extra_js %}
 <script>
   const form = document.querySelector('[data-points-form]');
   const total = document.querySelector('[data-points-total]');
@@ -29,7 +38,9 @@
   function updateTotal() {
     total.textContent = Array.from(inputs).reduce((sum, input) => sum + Number(input.value || 0), 0);
   }
-  inputs.forEach((input) => input.addEventListener('input', updateTotal));
-  updateTotal();
+  if (form && total) {
+    inputs.forEach((input) => input.addEventListener('input', updateTotal));
+    updateTotal();
+  }
 </script>
 {% endblock %}

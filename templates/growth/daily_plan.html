@@ -2,25 +2,40 @@
 {% block title %}Daily growth - TraitMirror{% endblock %}
 {% block content %}
 <section class="page-head">
-  <h1>Daily growth plan</h1>
-  <p class="muted">Small practices based on the widest gaps between your chosen ideal and current patterns.</p>
+  <div class="hero-copy">
+    <div class="eyebrow">Suggested practice</div>
+    <h1>Daily growth plan</h1>
+    <p>Small practices based on the widest gaps between your chosen ideal and current patterns.</p>
+  </div>
 </section>
 
 <section class="panel">
   {% if growth_plan %}
-    <h2>{{ growth_plan.summary }}</h2>
-    {% for item in growth_plan.recommendations %}
-      <form method="post" action="{% url 'practice_event' %}" class="recommendation">
-        {% csrf_token %}
-        <input type="hidden" name="trait" value="{{ item.trait }}">
-        <strong>{{ item.trait_name }}</strong>
-        <p>{{ item.message }}</p>
-        <textarea name="note" rows="2" placeholder="Optional note"></textarea>
-        <button type="submit">Mark practiced</button>
-      </form>
-    {% endfor %}
+    <div class="panel-header">
+      <div>
+        <h2>{{ growth_plan.summary }}</h2>
+        <p class="muted">Use these prompts as gentle practice, then add an optional reflection note.</p>
+      </div>
+    </div>
+    <div class="recommendation-list">
+      {% for item in growth_plan.recommendations %}
+        <form method="post" action="{% url 'practice_event' %}" class="recommendation form-stack">
+          {% csrf_token %}
+          <input type="hidden" name="trait" value="{{ item.trait }}">
+          <div>
+            <strong>{{ item.trait_name }}</strong>
+            <p>{{ item.message }}</p>
+          </div>
+          <label>
+            Reflection note
+            <textarea name="note" rows="2" placeholder="What did you notice?"></textarea>
+          </label>
+          <button type="submit">Mark practiced</button>
+        </form>
+      {% endfor %}
+    </div>
   {% else %}
-    <p>Complete an assessment to receive a daily growth plan.</p>
+    <div class="empty-state">Complete an assessment to receive a daily growth plan.</div>
   {% endif %}
 </section>
 {% endblock %}
